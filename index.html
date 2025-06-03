@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ReactiveJS - Simple Reactive Library</title>
+	<style>
+		body {
+			font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+			max-width: 1000px;
+			margin: 0 auto;
+			padding: 20px;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			color: #333;
+		}
+
+		.container {
+			background: white;
+			border-radius: 15px;
+			padding: 30px;
+			box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			text-align: center;
+			color: #4c51bf;
+			margin-bottom: 10px;
+			font-size: 2.5em;
+		}
+
+		.subtitle {
+			text-align: center;
+			color: #6b7280;
+			margin-bottom: 30px;
+			font-style: italic;
+		}
+
+		.demo-section {
+			background: #f8fafc;
+			border-radius: 10px;
+			padding: 25px;
+			margin: 20px 0;
+			border-left: 4px solid #4c51bf;
+		}
+
+		.demo-section h2 {
+			color: #374151;
+			margin-top: 0;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.badge {
+			background: #4c51bf;
+			color: white;
+			padding: 4px 12px;
+			border-radius: 20px;
+			font-size: 0.8em;
+			font-weight: 500;
+		}
+
+		.metric {
+			display: inline-block;
+			background: white;
+			padding: 12px 18px;
+			border-radius: 8px;
+			margin: 8px;
+			border: 2px solid #e5e7eb;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		.metric:hover {
+			border-color: #4c51bf;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(76, 81, 191, 0.15);
+		}
+
+		.primary {
+			border-color: #3b82f6;
+			background: #eff6ff;
+		}
+
+		.success {
+			border-color: #10b981;
+			background: #ecfdf5;
+		}
+
+		.warning {
+			border-color: #f59e0b;
+			background: #fffbeb;
+		}
+
+		.danger {
+			border-color: #ef4444;
+			background: #fef2f2;
+		}
+
+		button {
+			background: #4c51bf;
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 8px;
+			cursor: pointer;
+			margin: 5px;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			font-size: 14px;
+		}
+
+		button:hover {
+			background: #4338ca;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(67, 56, 202, 0.4);
+		}
+
+		.btn-success {
+			background: #10b981;
+		}
+
+		.btn-success:hover {
+			background: #059669;
+		}
+
+		.btn-danger {
+			background: #ef4444;
+		}
+
+		.btn-danger:hover {
+			background: #dc2626;
+		}
+
+		.btn-warning {
+			background: #f59e0b;
+		}
+
+		.btn-warning:hover {
+			background: #d97706;
+		}
+
+		input,
+		select {
+			padding: 12px;
+			border: 2px solid #e5e7eb;
+			border-radius: 8px;
+			margin: 5px;
+			font-size: 14px;
+			transition: border-color 0.3s ease;
+		}
+
+		input:focus,
+		select:focus {
+			outline: none;
+			border-color: #4c51bf;
+			box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.1);
+		}
+
+		.todo-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px;
+			margin: 8px 0;
+			background: white;
+			border-radius: 8px;
+			border: 1px solid #e5e7eb;
+			transition: all 0.3s ease;
+		}
+
+		.todo-item:hover {
+			border-color: #4c51bf;
+			box-shadow: 0 2px 8px rgba(76, 81, 191, 0.1);
+		}
+
+		.todo-item.completed {
+			opacity: 0.7;
+			text-decoration: line-through;
+		}
+
+		.code-block {
+			background: #1f2937;
+			color: #f9fafb;
+			padding: 20px;
+			border-radius: 8px;
+			margin: 15px 0;
+			font-family: 'Fira Code', monospace;
+			font-size: 14px;
+			overflow-x: auto;
+		}
+
+		.api-demo {
+			background: #f0f9ff;
+			border: 2px solid #0ea5e9;
+			border-radius: 10px;
+			padding: 20px;
+			margin: 20px 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>ReactiveJS</h1>
+		<p class="subtitle">A Simple Reactive State Management Library</p>
+
+		<!-- Counter Demo -->
+		<div class="demo-section">
+			<h2>🔢 Counter Demo <span class="badge">Basic Reactivity</span></h2>
+			<div class="metric primary">Count: <span data-reactive="count">0</span></div>
+			<div class="metric success">Double: <span data-reactive="doubleCount">0</span></div>
+			<div class="metric warning">Square: <span data-reactive="squareCount">0</span></div>
+			<div class="metric">Even/Odd: <span data-reactive="parity">even</span></div>
+			<br>
+			<button onclick="store.count++">➕ Increment</button>
+			<button onclick="store.count--">➖ Decrement</button>
+			<button onclick="store.count = 0" class="btn-danger">🔄 Reset</button>
+			<button onclick="store.count += 10" class="btn-success">⚡ +10</button>
+		</div>
+
+		<!-- Todo App Demo -->
+		<div class="demo-section">
+			<h2>✅ Todo App <span class="badge">Complex State</span></h2>
+			<div style="margin-bottom: 15px;">
+				<input type="text" id="todoInput" placeholder="Enter a new todo..." style="width: 300px;">
+				<button onclick="addTodo()" class="btn-success">Add Todo</button>
+			</div>
+
+			<div id="todoList"></div>
+
+			<div style="margin-top: 15px;">
+				<div class="metric primary">Total: <span data-reactive="totalTodos">0</span></div>
+				<div class="metric success">Completed: <span data-reactive="completedTodos">0</span></div>
+				<div class="metric warning">Pending: <span data-reactive="pendingTodos">0</span></div>
+				<button onclick="store.todos = []" class="btn-danger">Clear All</button>
+			</div>
+		</div>
+
+		<!-- User Profile Demo -->
+		<div class="demo-section">
+			<h2>👤 User Profile <span class="badge">Form Binding</span></h2>
+			<div style="margin-bottom: 15px;">
+				<input type="text" id="firstName" placeholder="First Name" onkeyup="store.firstName = this.value">
+				<input type="text" id="lastName" placeholder="Last Name" onkeyup="store.lastName = this.value">
+				<input type="number" id="age" placeholder="Age" onkeyup="store.age = +this.value">
+			</div>
+
+			<div class="metric">Full Name: <span data-reactive="fullName">-</span></div>
+			<div class="metric">Age Group: <span data-reactive="ageGroup">-</span></div>
+			<div class="metric success">Welcome: <span data-reactive="greeting">Hello!</span></div>
+		</div>
+
+		<!-- Shopping Cart Demo -->
+		<div class="demo-section">
+			<h2>🛒 Shopping Cart <span class="badge">Advanced Example</span></h2>
+			<div style="margin-bottom: 15px;">
+				<input type="text" id="itemName" placeholder="Item name">
+				<input type="number" id="itemPrice" placeholder="Price" step="0.01">
+				<button onclick="addToCart()" class="btn-success">Add to Cart</button>
+			</div>
+
+			<div id="cartItems"></div>
+
+			<div style="margin-top: 15px;">
+				<div class="metric primary">Items: <span data-reactive="cartCount">0</span></div>
+				<div class="metric success">Subtotal: $<span data-reactive="cartSubtotal">0.00</span></div>
+				<div class="metric warning">Tax: $<span data-reactive="cartTax">0.00</span></div>
+				<div class="metric danger">Total: $<span data-reactive="cartTotal">0.00</span></div>
+				<button onclick="store.cart = []" class="btn-danger">Empty Cart</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="./js/reactive.js"></script>
+
+	<script>
+
+		// Initialize the store
+		const store = ReactiveJS.createStore( {
+			count: 0,
+			todos: [],
+			firstName: '',
+			lastName: '',
+			age: 0,
+			cart: []
+		} );
+
+		// Define computed properties
+		store.computed( 'doubleCount', () => store.count * 2 );
+		store.computed( 'squareCount', () => store.count * store.count );
+		store.computed( 'parity', () => store.count % 2 === 0 ? 'even' : 'odd' );
+
+		store.computed( 'totalTodos', () => store.todos.length );
+		store.computed( 'completedTodos', () => store.todos.filter( todo => todo.completed ).length );
+		store.computed( 'pendingTodos', () => store.todos.filter( todo => !todo.completed ).length );
+
+		store.computed( 'fullName', () => {
+			const full = `${ store.firstName } ${ store.lastName }`.trim();
+			return full || '-';
+		} );
+
+		store.computed( 'ageGroup', () => {
+			if ( !store.age ) return '-';
+			if ( store.age < 18 ) return 'Minor';
+			if ( store.age < 65 ) return 'Adult';
+			return 'Senior';
+		} );
+
+		store.computed( 'greeting', () => {
+			const name = store.firstName || 'there';
+			return `Hello, ${ name }!`;
+		} );
+
+		store.computed( 'cartCount', () => store.cart.length );
+		store.computed( 'cartSubtotal', () =>
+			store.cart.reduce( ( sum, item ) => sum + item.price, 0 )
+		);
+		store.computed( 'cartTax', () => store.cartSubtotal * 0.08 );
+		store.computed( 'cartTotal', () => store.cartSubtotal + store.cartTax );
+
+		// Watch for changes
+		store.watch( 'count', ( newVal, oldVal ) => {
+			console.log( `Count changed from ${ oldVal } to ${ newVal }` );
+		} );
+
+		store.watch( 'todos', () => {
+			renderTodos();
+		} );
+
+		store.watch( 'cart', () => {
+			renderCart();
+		} );
+
+		// Application functions
+		function addTodo () {
+			const input = document.getElementById( 'todoInput' );
+			const text = input.value.trim();
+
+			if ( text ) {
+				const newTodos = [ ...store.todos ];
+				newTodos.push( {
+					id: Date.now(),
+					text: text,
+					completed: false
+				} );
+				store.todos = newTodos;
+				input.value = '';
+			}
+		}
+
+		function toggleTodo ( id ) {
+			store.todos = store.todos.map( todo =>
+				todo.id === id ? { ...todo, completed: !todo.completed } : todo
+			);
+			// store.todos = newTodos;
+		}
+
+		function deleteTodo ( id ) {
+			store.todos = store.todos.filter( todo => todo.id !== id );
+		}
+
+		function renderTodos () {
+			const container = document.getElementById( 'todoList' );
+			container.innerHTML = '';
+
+			store.todos.forEach( todo => {
+				const div = document.createElement( 'div' );
+				div.className = `todo-item ${ todo.completed ? 'completed' : '' }`;
+				div.innerHTML = `
+                    <span onclick="toggleTodo(${ todo.id })" style="cursor: pointer; flex: 1;">
+                        ${ todo.completed ? '✅' : '⏳' } ${ todo.text }
+                    </span>
+                    <button onclick="deleteTodo(${ todo.id })" class="btn-danger">Delete</button>
+                `;
+				container.appendChild( div );
+			} );
+		}
+
+		function addToCart () {
+			const nameEl = document.getElementById( 'itemName' );
+			const priceEl = document.getElementById( 'itemPrice' );
+
+			const name = nameEl.value.trim();
+			const price = parseFloat( priceEl.value ) || 0;
+
+			if ( name && price > 0 ) {
+				// const newCart = [ ...store.cart ];
+				store.cart.push( {
+					id: Date.now(),
+					name: name,
+					price: price
+				} );
+				// store.cart = newCart;
+				store.cart = [ ...store.cart ]; // Trigger reactivity
+
+				nameEl.value = '';
+				priceEl.value = '';
+			}
+		}
+
+		function removeFromCart ( id ) {
+			store.cart = store.cart.filter( item => item.id !== id );
+		}
+
+		function renderCart () {
+			const container = document.getElementById( 'cartItems' );
+			container.innerHTML = '';
+
+			store.cart.forEach( item => {
+				const div = document.createElement( 'div' );
+				div.className = 'todo-item';
+				div.innerHTML = `
+                    <span>🛍️ ${ item.name }</span>
+                    <span>$${ item.price.toFixed( 2 ) }</span>
+                    <button onclick="removeFromCart(${ item.id })" class="btn-danger">Remove</button>
+                `;
+				container.appendChild( div );
+			} );
+		}
+
+		// Allow Enter key for inputs
+		document.getElementById( 'todoInput' ).addEventListener( 'keypress', ( e ) => {
+			if ( e.key === 'Enter' ) addTodo();
+		} );
+
+		document.getElementById( 'itemName' ).addEventListener( 'keypress', ( e ) => {
+			if ( e.key === 'Enter' ) addToCart();
+		} );
+
+		document.getElementById( 'itemPrice' ).addEventListener( 'keypress', ( e ) => {
+			if ( e.key === 'Enter' ) addToCart();
+		} );
+
+		// Initialize DOM bindings
+		store.autoBind();
+
+		console.log( 'ReactiveJS Demo loaded! Try: store.count = 42' );
+	</script>
+</body>
+
+</html>
