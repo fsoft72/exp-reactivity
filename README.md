@@ -14,6 +14,10 @@ This is just an experimental implementation of a reactive state management syste
 - **Data Binding**: Declarative DOM binding using `data-reactive` attributes
 - **Zero Dependencies**: Pure vanilla JavaScript implementation
 
+## Documentation
+
+To learn how to use this reactive system, check out the [DOCUMENTATION.md](DOCUMENTATION.md) file. It provides detailed instructions on how to set up and use the reactive store, create computed properties, and add watchers.
+
 ## Quick Demo
 
 The project includes several interactive examples:
