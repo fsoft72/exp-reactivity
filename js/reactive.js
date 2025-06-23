@@ -1,4 +1,6 @@
 // ReactiveJS - Simple Reactive Library
+// Developed by Fabio Rotondo https://github.com/fsoft72
+// MIT License
 const ReactiveJS = ( () => {
 	let currentStore = {};
 	let computedProperties = {};
